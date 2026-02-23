@@ -31,18 +31,28 @@ Se solicita:
 * atributo ruta_archivo
 * métodos: agregar, listar, eliminar
 """
+
 # Textos adicionales para la pantalla
+
 tituloPrograma = "Bienvenido al catálogo de películas🍿🎦"
 
-# Clases y funciones para funcionalidades del catálogo
+# Clases, funciones y variables para funcionalidades del catálogo
+
+directorio = "." # Indica que la ruta del directorio es el directorio actual 
+archivos_catalogos_existentes = [f for f in os.listdir(directorio) if f.endswith('.txt')] # Lista que almacena todos los archivos de catálogos que existen
+nombre_archivos_catalogos_existentes = [os.path.splitext(f)[0] for f in archivos_catalogos_existentes] # Lista de nombres de los archivos sin extensión
+nombresCatalogos = [elemento.lower() for elemento in nombre_archivos_catalogos_existentes] # Se convierten los nombres a minúsculas para evitar inconsistencias
 
 def ingresoCatalogo(): # Funcionalidad de ingreso.
         inputCatalogo = input("Inserte el nombre del catálogo sobre el que desea operar: ") # Se le solicita al usuario que ingrese el nombre de un catálogo.
-        if inputCatalogo in catalogosExistentes: # El programa verifica si el catálogo ya existe. En caso de que sí, ingresa al menú.
+        if inputCatalogo.lower() in nombresCatalogos: # El programa verifica si el catálogo ya existe. En caso de que sí, ingresa al menú.
             menuCatalogo()
         else: # En caso de que no, se indicará al usuario que dicho catálogo no existe y preguntará si desea crearlo.
              crearCatalogo = input("El catálogo no existe. ¿Desea crearlo?(si/no): ")
-             if crearCatalogo == "Si": # Si decide crear un catálogo con ese nombre, se generará el mismo y se accederá al menú correspondiente.
+             input_crearCatalogo = crearCatalogo.lower() # Se pasa a minúsculas para evitar inconsistencias
+             if input_crearCatalogo == "si": # Si decide crear un catálogo con ese nombre, se generará el mismo y se accederá al menú correspondiente.
+                  with open(inputCatalogo, 'w', encoding='UTF-8') as archivo:
+                      archivo.write(f"Catálogo de películas: '{inputCatalogo}'")
                   print("Nuevo catálogo creado con éxito.")
                   menuCatalogo()
              else: # Si no desea crearlo, habilitará nuevamente el input para que ingrese un catálogo existente.
@@ -100,7 +110,7 @@ class Pelicula(CatalogoPelicula): # Subclase para generar objetos película. Se 
 
 catalogoTest = CatalogoPelicula("Test", "Test")
 catalogoDePrueba = catalogoTest.nombre
-catalogosExistentes = [catalogoDePrueba]
+catalogosExistentesTest = [catalogoDePrueba]
 print(tituloPrograma)
 ingresoCatalogo()
 
