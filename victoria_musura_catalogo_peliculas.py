@@ -41,26 +41,12 @@ print(tituloPrograma)
 
 # Clases, funciones y variables para funcionalidades del catálogo
 
-directorio = "." # Indica que la ruta del directorio es el directorio actual 
-archivos_catalogos_existentes = [f for f in os.listdir(directorio) if f.endswith('.txt')] # Lista que almacena todos los archivos de catálogos que existen
-nombre_archivos_catalogos_existentes = [os.path.splitext(f)[0] for f in archivos_catalogos_existentes] # Lista de nombres de los archivos sin extensión
-nombresCatalogos = [elemento.lower() for elemento in nombre_archivos_catalogos_existentes] # Se convierten los nombres a minúsculas para evitar inconsistencias
-inputCatalogo = input("Inserte el nombre del catálogo sobre el que desea operar: ") # Se le solicita al usuario que ingrese el nombre de un catálogo.
-
-class Pelicula(): # Subclase para generar objetos película. Se establece el atributo privado "review" según lo solicitado por el trabajo final. 
-    # Los atributos fueron elegidos aleatoriamente por quien genera el código ya que no se especificaban los mismos.
-    def __init__(self, nombre_pelicula, director, anio, __review):
-        self.nombre_pelicula = nombre_pelicula
-        self.director = director
-        self.anio = anio
-        self.review = __review
-
 class CatalogoPelicula: # Clase para generar objetos catálogos. Contiene atributos y métodos según lo solicitado por el trabajo final.
-    def __init__(self, nombre, ruta_archivo):
-        self.nombre = nombre
+    def __init__(self, nombre_catalogo, ruta_archivo):
+        self.nombre_catalogo = nombre_catalogo
         self.ruta_archivo = ruta_archivo
 
-    def agregarPelicula(ruta_archivo): # Método para agregar una película al catálogo. 
+    def agregarPelicula(nombre_catalogo, ruta_archivo): # Método para agregar una película al catálogo. 
         # Solicita al usuario ingresar diferentes valores, escribiendolos en el archivo a medida que son ingresados
         # Genera un objeto "nueva_pelicula" utilizando como atributos los valores ingresados por el usuario.
         # Al final se imprime un mensaje que indica al usuario que se ha añadido correctamente la película.
@@ -73,8 +59,8 @@ class CatalogoPelicula: # Clase para generar objetos catálogos. Contiene atribu
             archivo.write(f"Año de estreno: {anio}\n")
             __review = input("Ingrese una review: ")
             archivo.write(f"Review de la película: {__review}\n")
-            # nueva_pelicula = Pelicula(nombre_pelicula, director, anio, __review)
-        print("🎬 Pelicula añadida con éxito")
+            nueva_pelicula = Pelicula(nombre_catalogo, ruta_archivo, nombre_pelicula, director, anio, __review)
+        print(f"🎬 La pelicula '{nueva_pelicula.nombre_pelicula}' se ha añadido con éxito al catálogo '{nombre_catalogo}'")
 
     def listarPeliculas(ruta_archivo): # Método para listar las películas del catálogo.
         # Se lee el contenido del archivo devolviendo las líneas como lista. Para cada línea se omiten los saltos.
@@ -91,53 +77,87 @@ class CatalogoPelicula: # Clase para generar objetos catálogos. Contiene atribu
         else:
             print("No se ha podido eliminar el catálogo.")
 
-def ingresoCatalogo(): # Funcionalidad de ingreso. 
-        if inputCatalogo.lower() in nombresCatalogos: # El programa verifica si el catálogo ya existe. En caso de que sí, ingresa al menú.
-                print(f"Bienvenido al catálogo '{inputCatalogo}'")
-                menuCatalogo()
-        else: # En caso de que no, se indicará al usuario que dicho catálogo no existe y preguntará si desea crearlo.
-             crearCatalogo = input("El catálogo no existe. ¿Desea crearlo?(si/no): ")
-             input_crearCatalogo = crearCatalogo.lower() # Se pasa a minúsculas para evitar inconsistencias
-             if input_crearCatalogo == "si": # Si decide crear un catálogo con ese nombre, se generará el mismo y se accederá al menú correspondiente.
-                  with open(f"{inputCatalogo}.txt", 'w', encoding='UTF-8') as archivo:
-                    archivo.write(f"Catálogo de películas: '{inputCatalogo}'\n")
-                    # ruta = Path(f"{inputCatalogo}.txt").resolve()
-                    # archivo = CatalogoPelicula({inputCatalogo}, {ruta})
-                    # archivos_catalogos_existentes.append(archivo)
-                  print("Nuevo catálogo creado con éxito.")
-                  menuCatalogo()
-             else: # Si no desea crearlo, habilitará nuevamente el input para que ingrese un catálogo existente.
-                  print("No se ha podido acceder al sistema.")
+def ingresoCatalogo(): # Funcionalidad de ingreso.
+    inputCatalogo = input("Inserte el nombre del catálogo sobre el que desea operar: ") # Se le solicita al usuario que ingrese el nombre de un catálogo.
+    directorio = "." # Indica que la ruta del directorio es el directorio actual 
+    archivos_catalogos_existentes = [f for f in os.listdir(directorio) if f.endswith('.txt')] # Lista que almacena todos los archivos de catálogos que existen
+    nombre_archivos_catalogos_existentes = [os.path.splitext(f)[0] for f in archivos_catalogos_existentes] # Lista de nombres de los archivos sin extensión
+    nombresCatalogos = [elemento.lower() for elemento in nombre_archivos_catalogos_existentes] # Se convierten los nombres a minúsculas para evitar inconsistencias
 
-def menuCatalogo(): # Funcionalidad de acciones dentro del catálogo
-        listadoOpciones = "Opciones:\n1. Agregar película\n2- Listar películas\n3- Eliminar catálogo actual\n4- Salir"
+    def menuCatalogo(): # Funcionalidad de acciones dentro del catálogo
+        listadoOpciones = "Opciones:\n1. Agregar película\n2- Listar películas\n3- Eliminar catálogo actual\n4- Volver al menú anterior\n5- Salir"
         print(listadoOpciones) # Se muestran las opciones disponibles al usuario
-        inputMenu = int(input("Elija una opción: ")) # Se le solicita al usuario que ingrese un número de opción
+        inputMenu = input("Elija una opción: ") # Se le solicita al usuario que ingrese un número de opción
         opcionMenu = inputMenu
+        nombre_catalogo = f"{inputCatalogo}"
         ruta_archivo = f"{inputCatalogo}.txt"
-        if opcionMenu == 1: # La opción 1 redirige al método agregarPelicula() de la clase CatalogoPelicula
-            CatalogoPelicula.agregarPelicula(ruta_archivo)
+        if opcionMenu == "1": # La opción 1 redirige al método agregarPelicula() de la clase CatalogoPelicula
+            CatalogoPelicula.agregarPelicula(nombre_catalogo, ruta_archivo)
         else:
-            if opcionMenu == 2: # La opción 2 redirige al método listarPelicula() de la clase CatalogoPelicula
+            if opcionMenu == "2": # La opción 2 redirige al método listarPelicula() de la clase CatalogoPelicula
                 CatalogoPelicula.listarPeliculas(ruta_archivo)
             else:
-                if opcionMenu == 3: # La opción 3 redirige al método eliminarCatalogo() de la clase CatalogoPelicula
+                if opcionMenu == "3": # La opción 3 redirige al método eliminarCatalogo() de la clase CatalogoPelicula
                     CatalogoPelicula.eliminarCatalogo(ruta_archivo)
                 else:
-                    if opcionMenu == 4: # La opción 5 finaliza la sesión
-                        print("Ha finalizado su sesión en el catálogo de películas")
-                    else: # Cualquier otro valor numérico ingresado le indica al usuario que la opción es inválida y habilita nuevamente el menú con su input.
-                        print("La opción ingresada no es válida. Vuelva a intentar")
-                        menuCatalogo()
+                    if opcionMenu == "4":
+                         ingresoCatalogo()
+                    else:
+                        if opcionMenu == "5": # La opción 5 finaliza la sesión
+                            print("Ha finalizado su sesión en el catálogo de películas")
+                        else: # Cualquier otro valor numérico ingresado le indica al usuario que la opción es inválida y habilita nuevamente el menú con su input.
+                            print("La opción ingresada no es válida. Vuelva a intentar")
+                            menuCatalogo()
+
+    if inputCatalogo.lower() in nombresCatalogos: # El programa verifica si el catálogo ya existe. En caso de que sí, ingresa al menú.
+                print(f"Bienvenido al catálogo '{inputCatalogo}'")
+                menuCatalogo()
+    else: # En caso de que no, se indicará al usuario que dicho catálogo no existe y preguntará si desea crearlo.
+            crearCatalogo = input("El catálogo no existe. ¿Desea crearlo?(si/no): ")
+            input_crearCatalogo = crearCatalogo.lower() # Se pasa a minúsculas para evitar inconsistencias
+            if input_crearCatalogo == "si": # Si decide crear un catálogo con ese nombre, se generará el mismo y se accederá al menú correspondiente.
+                with open(f"{inputCatalogo}.txt", 'a', encoding='UTF-8') as archivo:
+                    archivo.write(f"Nombre del catálogo: '{inputCatalogo}'\n")
+                    # ruta = Path(f"{inputCatalogo}.txt").resolve()
+                    # archivo = CatalogoPelicula({inputCatalogo}, {ruta})
+                    # nombre_archivo = archivo.nombre_catalogo
+                    # nombresCatalogos.append(nombre_archivo)
+                    print("Nuevo catálogo creado con éxito.")
+                menuCatalogo()
+            else: # Si no desea crearlo, habilitará nuevamente el input para que ingrese un catálogo existente.
+                print("No se ha podido acceder al sistema.")
+
+class Pelicula(CatalogoPelicula): # Subclase para generar objetos película. Se establece el atributo privado "review" según lo solicitado por el trabajo final. 
+    # Los atributos fueron elegidos aleatoriamente por quien genera el código ya que no se especificaban los mismos.
+        def __init__(self, nombre_catalogo, ruta_archivo, nombre_pelicula, director, anio, __review):
+            super().__init__(nombre_catalogo, ruta_archivo)
+            self.nombre_pelicula = nombre_pelicula
+            self.director = director
+            self.anio = anio
+            self.__review = __review
+
+        @property
+        def review(self):
+             return self.__review
+        
+        @review.setter
+        def nueva_review(self, review_actualizada):
+             if isinstance(review_actualizada, any):
+                  self.__review = review_actualizada
+             
+
+def catalogoMuestra(): # Función que genera un catálogo de muestra para el programa
+    catalogo = CatalogoPelicula('Catalogo de Muestra', 'CatalogoMuestra.txt')
+    pelicula_muestra = Pelicula(f"{catalogo.nombre_catalogo}", {catalogo.ruta_archivo},"Tiempo de valientes", "Damián Szifron", 2005, "Un clásico argentino que nos muestra la relación entre un psicoanalista y un policia")
+    with open(f'{catalogo.ruta_archivo}', 'w', encoding='UTF-8') as archivo:
+        archivo.write(f'Nombre del catálogo: {catalogo.nombre_catalogo}\n')
+        archivo.write(f"Nombre de la película: {pelicula_muestra.nombre_pelicula}\n")
+        archivo.write(f"Director: {pelicula_muestra.director}\n")
+        archivo.write(f"Año: {pelicula_muestra.anio}\n")
+        archivo.write(f"Review: {pelicula_muestra.review}\n")
 
 # Ingreso al catálogo y variables de prueba
 
-# catalogoTest = CatalogoPelicula("Test", "Test")
-# catalogoDePrueba = catalogoTest.nombre
-# catalogosExistentesTest = [catalogoDePrueba]
-
+catalogoMuestra()
 ingresoCatalogo()
 
-# Probando atributo privado
-# pelicula1 = Pelicula("El secreto de sus ojos", "Juan José Campanella", 2009, "Gran película. Director gorila")
-# print(pelicula1.__review)
