@@ -7,6 +7,14 @@ from victoria_musura_catalogo_peliculas import CatalogoPelicula, Pelicula
 
 # Ejecución del programa
 
+def listarCatalogos():
+    directorio = "." # Indica que la ruta del directorio es el directorio actual 
+    archivos_catalogos_existentes = [f for f in os.listdir(directorio) if f.endswith('.txt')] # Lista que almacena todos los archivos de catálogos que existen
+    nombre_archivos_catalogos_existentes = [os.path.splitext(f)[0] for f in archivos_catalogos_existentes] # Lista de nombres de los archivos sin extensión
+    print("Listado de catálogos:")
+    for elemento in nombre_archivos_catalogos_existentes:
+        print(elemento)
+
 def menuPrincipal():
     tituloPrograma = "Bienvenido al catálogo de películas🍿🎦"
     print(tituloPrograma)
@@ -15,6 +23,7 @@ def menuPrincipal():
         print(opciones)
         input_opcion = input("Elija una opción: ")
         if input_opcion == "1":
+            listarCatalogos()
             ingresoCatalogo()
         else:
             if input_opcion == "2":
