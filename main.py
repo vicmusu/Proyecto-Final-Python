@@ -5,7 +5,7 @@ os.system('cls')
 
 from victoria_musura_catalogo_peliculas import CatalogoPelicula, Pelicula
 
-# Ejecución del programa
+# Funciones para la ejecución del programa
 
 def listarCatalogos(): # Funcionalidad para listar los catálogos existentes
     directorio = "." # Indica que la ruta del directorio es el directorio actual 
