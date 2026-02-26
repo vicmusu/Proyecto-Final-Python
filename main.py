@@ -7,7 +7,7 @@ from victoria_musura_catalogo_peliculas import CatalogoPelicula, Pelicula
 
 # Ejecución del programa
 
-def listarCatalogos():
+def listarCatalogos(): # Funcionalidad para listar los catálogos existentes
     directorio = "." # Indica que la ruta del directorio es el directorio actual 
     archivos_catalogos_existentes = [f for f in os.listdir(directorio) if f.endswith('.txt')] # Lista que almacena todos los archivos de catálogos que existen
     nombre_archivos_catalogos_existentes = [os.path.splitext(f)[0] for f in archivos_catalogos_existentes] # Lista de nombres de los archivos sin extensión
@@ -15,21 +15,21 @@ def listarCatalogos():
     for elemento in nombre_archivos_catalogos_existentes:
         print(elemento)
 
-def menuPrincipal():
-    tituloPrograma = "Bienvenido al catálogo de películas🍿🎦"
-    print(tituloPrograma)
-    while True:
+def menuPrincipal(): # Funcionalidad para mostrar un menú de inicio.
+    tituloPrograma = "Bienvenido al catálogo de películas🍿🎦" 
+    print(tituloPrograma) # Se impime un mensaje de bienvenida
+    while True: # Se genera un bucle para mantener activo el programa
         opciones = "Opciones:\n1-Ingresar a un catálogo\n2-Salir"
-        print(opciones)
+        print(opciones) # Se imprimen las opciones disponibles y se solicita al usuario que ingrese una opción
         input_opcion = input("Elija una opción: ")
-        if input_opcion == "1":
+        if input_opcion == "1": # La opción 1 muestra los catálogos existentes e ingresa a la función ingresoCatalogo
             listarCatalogos()
             ingresoCatalogo()
-        else:
-            if input_opcion == "2":
+        else: 
+            if input_opcion == "2": # La opción 2 finaliza el programa
                 print("Se ha cerrado el programa.")
                 break
-            else:
+            else: # Cualquier otra opción es tomada como inválida y muestra un mensaje al usuario.
                 print("Opción inválida. Ingrese un número de las opciones listadas.")
 
 
@@ -85,6 +85,8 @@ def catalogoMuestra(): # Función que genera un catálogo de muestra para el pro
         archivo.write(f"Director: {pelicula_muestra.director}\n")
         archivo.write(f"Año: {pelicula_muestra.anio}\n")
         archivo.write(f"Review: {pelicula_muestra.review}\n")
+
+# Ejecución del programa
 
 catalogoMuestra()
 if __name__ == "__main__":
