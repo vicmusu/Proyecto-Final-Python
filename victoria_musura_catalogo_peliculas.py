@@ -42,11 +42,6 @@ class CatalogoPelicula: # Clase para generar objetos catálogos. Contiene atribu
         else:
             print("No se ha podido eliminar el catálogo.")
     
-    # directorio = "." # Indica que la ruta del directorio es el directorio actual 
-    # archivos_catalogos_existentes = [f for f in os.listdir(directorio) if f.endswith('.txt')] # Lista que almacena todos los archivos de catálogos que existen
-    # nombre_archivos_catalogos_existentes = [os.path.splitext(f)[0] for f in archivos_catalogos_existentes] # Lista de nombres de los archivos sin extensión
-    # nombresCatalogos = [elemento.lower() for elemento in nombre_archivos_catalogos_existentes] # Se convierten los nombres a minúsculas para evitar inconsistencias
-
 class Pelicula(): # Clase para generar objetos película. Se establece el atributo privado "review" según lo solicitado por el trabajo final. 
     # Los atributos fueron elegidos aleatoriamente por quien genera el código ya que no se especificaban los mismos.
         def __init__(self, nombre_pelicula, director, anio, review):
